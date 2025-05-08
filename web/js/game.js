@@ -56,21 +56,26 @@ class Game {
             this.images.hardZombie.onload = checkAllImagesLoaded;
             this.images.harderZombie.onload = checkAllImagesLoaded;
             
-            this.images.plane.src = '../images/plane.png';
-            this.images.simpleZombie.src = '../images/simple.png';
-            this.images.hardZombie.src = '../images/hard.png';
-            this.images.harderZombie.src = '../images/harder.png';
+            this.images.plane.onerror = (e) => console.error('Error loading plane image:', e);
+            this.images.simpleZombie.onerror = (e) => console.error('Error loading simple zombie image:', e);
+            this.images.hardZombie.onerror = (e) => console.error('Error loading hard zombie image:', e);
+            this.images.harderZombie.onerror = (e) => console.error('Error loading harder zombie image:', e);
+            
+            this.images.plane.src = '/images/plane.png';
+            this.images.simpleZombie.src = '/images/simple.png';
+            this.images.hardZombie.src = '/images/hard.png';
+            this.images.harderZombie.src = '/images/harder.png';
         });
     }
 
     loadSounds() {
         return new Promise((resolve) => {
             this.sounds = {
-                shoot: new Audio('../sounds/mixkit-short-laser-gun-shot.wav'),
-                hit: new Audio('../sounds/mixkit-hit.wav'),
-                lifeLost: new Audio('../sounds/mixkit-negative-game-notification.wav'),
-                gameOver: new Audio('../sounds/mixkit-arcade-retro-game-over.wav'),
-                background: new Audio('../sounds/mixkit-background.mp3')
+                shoot: new Audio('/sounds/mixkit-short-laser-gun-shot.wav'),
+                hit: new Audio('/sounds/mixkit-hit.wav'),
+                lifeLost: new Audio('/sounds/mixkit-negative-game-notification.wav'),
+                gameOver: new Audio('/sounds/mixkit-arcade-retro-game-over.wav'),
+                background: new Audio('/sounds/mixkit-background.mp3')
             };
 
             let loadedSounds = 0;
@@ -89,6 +94,7 @@ class Game {
             
             Object.values(this.sounds).forEach(sound => {
                 sound.addEventListener('canplaythrough', checkAllSoundsLoaded, { once: true });
+                sound.onerror = (e) => console.error('Error loading sound:', e.target.src);
             });
         });
     }
@@ -245,7 +251,7 @@ class Game {
         return obj1.x < obj2.x + obj2.width &&
                obj1.x + obj1.width > obj2.x &&
                obj1.y < obj2.y + obj2.height &&
-               obj1.y + obj1.height > obj2.y;
+               obj1.y + obj2.height > obj2.y;
     }
 
     loseLife() {
